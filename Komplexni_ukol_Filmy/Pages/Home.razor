@@ -56,8 +56,8 @@ else
                     <td>@film.Reziser</td>
                     <td><span class="badge bg-secondary">@film.Zanr</span></td>
                     <td>
-                        <a href="/film/@film.Id" class="btn btn-sm btn-outline-primary">Detail</a>
-                        <a href="/upravit/@film.Id" class="btn btn-sm btn-outline-warning">Upravit</a>
+                        <a href="film/@film.Id" class="btn btn-sm btn-outline-primary">Detail</a>
+                        <a href="upravit/@film.Id" class="btn btn-sm btn-outline-warning">Upravit</a>
                         <button class="btn btn-sm btn-outline-danger" @onclick="() => SmazatFilm(film.Id)">Smazat</button>
                     </td>
                 </tr>
