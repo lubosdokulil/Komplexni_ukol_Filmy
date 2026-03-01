@@ -1,0 +1,39 @@
+name: Deploy to GitHub Pages
+
+# Spustí se pokaždé, když nahraješ kód do větve 'master' nebo 'main'
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  deploy-to-github-pages:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repozitáře
+      uses: actions/checkout@v4
+
+    - name: Nastavení .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    # ZDE UPRAV NÁZEV: Změň "TvujProjekt.csproj" na skutečný název tvého souboru (najdeš ho ve složce projektu)
+    - name: Sestavení (Publish) Blazor projektu
+      run: dotnet publish Komplexni_ukol_Filmy/Komplexni_ukol_Filmy.csproj -c Release -o release --nologo
+
+    # ZDE UPRAV NÁZEV REPOZITÁŘE: Změň "muj-blazor-ukol" na přesný název tvého GitHub repozitáře
+    - name: Úprava base href v index.html
+      run: sed -i 's/<base href="\/" \/>/<base href="\/Komplexni_ukol_Filmy\/" \/>/g' release/wwwroot/index.html
+
+    - name: Zkopírování index.html do 404.html (kvůli SPA routování)
+      run: cp release/wwwroot/index.html release/wwwroot/404.html
+
+    - name: Přidání .nojekyll souboru (aby GitHub neignoroval _framework složku)
+      run: touch release/wwwroot/.nojekyll
+
+    - name: Nasazení na GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./release/wwwroot
