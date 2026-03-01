@@ -1,0 +1,38 @@
+﻿@page "/film/{Id:int}"
+
+<PageTitle>Detail filmu</PageTitle>
+
+@if (hledanyFilm == null)
+{
+    <div class="alert alert-danger mt-4">Film s tímto ID nebyl nalezen.</div>
+}
+else
+{
+    <div class="card shadow mt-4" style="max-width: 600px;">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">@hledanyFilm.Nazev</h2>
+            <span class="badge bg-light text-dark fs-6">@hledanyFilm.RokVydani</span>
+        </div>
+        <div class="card-body fs-5">
+            <p><strong>Režie:</strong> @hledanyFilm.Reziser</p>
+            <p><strong>Žánr:</strong> @hledanyFilm.Zanr</p>
+            <p><strong>Popis:</strong> @hledanyFilm.Popis</p>
+            <p class="text-muted fs-6 mt-4">Interní ID v databázi: @hledanyFilm.Id</p>
+        </div>
+        <div class="card-footer bg-white">
+            <a href="/" class="btn btn-secondary">⬅ Zpět na seznam</a>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Models.Film? hledanyFilm;
+
+    protected override void OnInitialized()
+    {
+        hledanyFilm = Models.DatabazeFilmu.Seznam.FirstOrDefault(f => f.Id == Id);
+    }
+}

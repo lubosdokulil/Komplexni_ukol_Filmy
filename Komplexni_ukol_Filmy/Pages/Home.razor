@@ -1,0 +1,118 @@
+﻿@page "/"
+@inject HttpClient Http
+
+<PageTitle>Katalog filmů</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Katalog filmů</h1>
+    <a href="/pridat" class="btn btn-success">➕ Přidat nový film</a>
+</div>
+
+@if (Models.DatabazeFilmu.Seznam.Count == 0)
+{
+    <p><em>Načítám data z JSONu...</em></p>
+}
+else
+{
+    <div class="row mb-4 bg-light p-3 rounded">
+        <div class="col-md-4">
+            <label class="form-label"><strong>Filtrovat podle žánru:</strong></label>
+            <select class="form-select" @bind="vybranyZanr">
+                <option value="">-- Všechny žánry --</option>
+                @foreach (var zanr in Models.DatabazeFilmu.Seznam.Select(f => f.Zanr).Distinct().OrderBy(z => z))
+                {
+                    <option value="@zanr">@zanr</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label"><strong>Řadit podle:</strong></label>
+            <select class="form-select" @bind="kriteriumRazeni">
+                <option value="nazev_vzestupne">Názvu (A-Z)</option>
+                <option value="nazev_sestupne">Názvu (Z-A)</option>
+                <option value="rok_vzestupne">Roku (od nejstarších)</option>
+                <option value="rok_sestupne">Roku (od nejnovějších)</option>
+                <option value="reziser_vzestupne">Režiséra (A-Z)</option>
+            </select>
+        </div>
+    </div>
+
+    <table class="table table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Název filmu</th>
+                <th>Rok</th>
+                <th>Režisér</th>
+                <th>Žánr</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var film in ZobrazeneFilmy)
+            {
+                <tr>
+                    <td><strong>@film.Nazev</strong></td>
+                    <td>@film.RokVydani</td>
+                    <td>@film.Reziser</td>
+                    <td><span class="badge bg-secondary">@film.Zanr</span></td>
+                    <td>
+                        <a href="/film/@film.Id" class="btn btn-sm btn-outline-primary">Detail</a>
+                        <a href="/upravit/@film.Id" class="btn btn-sm btn-outline-warning">Upravit</a>
+                        <button class="btn btn-sm btn-outline-danger" @onclick="() => SmazatFilm(film.Id)">Smazat</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    // Proměnné napojené na výběrová menu (selecty)
+    private string vybranyZanr = "";
+    private string kriteriumRazeni = "nazev_vzestupne";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Models.DatabazeFilmu.Seznam.Count == 0)
+        {
+            var data = await Http.GetFromJsonAsync<List<Models.Film>>("data/filmy.json");
+            if (data != null) Models.DatabazeFilmu.Seznam = data;
+        }
+    }
+
+    // Tato vypočítaná vlastnost automaticky vrací seřazená a vyfiltrovaná data
+    private IEnumerable<Models.Film> ZobrazeneFilmy
+    {
+        get
+        {
+            // Vezmeme celou databázi
+            var dotaz = Models.DatabazeFilmu.Seznam.AsEnumerable();
+
+            // 1. Krok: Filtrace podle žánru (pokud je nějaký vybrán)
+            if (!string.IsNullOrEmpty(vybranyZanr))
+            {
+                dotaz = dotaz.Where(f => f.Zanr == vybranyZanr);
+            }
+
+            // 2. Krok: Řazení pomocí nového C# "switch expression"
+            return kriteriumRazeni switch
+            {
+                "nazev_vzestupne" => dotaz.OrderBy(f => f.Nazev),
+                "nazev_sestupne" => dotaz.OrderByDescending(f => f.Nazev),
+                "rok_vzestupne" => dotaz.OrderBy(f => f.RokVydani),
+                "rok_sestupne" => dotaz.OrderByDescending(f => f.RokVydani),
+                "reziser_vzestupne" => dotaz.OrderBy(f => f.Reziser),
+                _ => dotaz
+            };
+        }
+    }
+    private void SmazatFilm(int idFilmu)
+    {
+        // Najdeme film podle ID a rovnou ho odstraníme z naší paměti
+        var filmKSmazani = Models.DatabazeFilmu.Seznam.FirstOrDefault(f => f.Id == idFilmu);
+        if (filmKSmazani != null)
+        {
+            Models.DatabazeFilmu.Seznam.Remove(filmKSmazani);
+        }
+    }
+}

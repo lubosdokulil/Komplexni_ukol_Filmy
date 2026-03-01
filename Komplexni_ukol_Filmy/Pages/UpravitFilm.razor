@@ -1,0 +1,97 @@
+﻿@page "/upravit/{Id:int}"
+@inject NavigationManager NavManager
+
+<PageTitle>Upravit film</PageTitle>
+
+<h1>✏️ Upravit film</h1>
+<hr />
+
+@if (upravovanyFilm == null)
+{
+    <p>Načítám nebo film neexistuje...</p>
+}
+else
+{
+    <div class="card shadow-sm p-4" style="max-width: 600px;">
+        <EditForm Model="upravovanyFilm" OnValidSubmit="UlozitZmeny">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label class="form-label">Název filmu:</label>
+                <InputText @bind-Value="upravovanyFilm.Nazev" class="form-control" />
+                <ValidationMessage For="@(() => upravovanyFilm.Nazev)" class="text-danger" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Rok vydání:</label>
+                <InputNumber @bind-Value="upravovanyFilm.RokVydani" class="form-control" />
+                <ValidationMessage For="@(() => upravovanyFilm.RokVydani)" class="text-danger" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Režisér:</label>
+                <InputText @bind-Value="upravovanyFilm.Reziser" class="form-control" />
+                <ValidationMessage For="@(() => upravovanyFilm.Reziser)" class="text-danger" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Žánr:</label>
+                <InputText @bind-Value="upravovanyFilm.Zanr" class="form-control" />
+                <ValidationMessage For="@(() => upravovanyFilm.Zanr)" class="text-danger" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Popis (děj):</label>
+                <InputTextArea @bind-Value="upravovanyFilm.Popis" class="form-control" rows="3" />
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-warning">Uložit změny</button>
+                <a href="/" class="btn btn-outline-secondary">Zrušit</a>
+            </div>
+        </EditForm>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Models.Film? upravovanyFilm;
+
+    protected override void OnInitialized()
+    {
+        // Najdeme film v naší "databázi"
+        var original = Models.DatabazeFilmu.Seznam.FirstOrDefault(f => f.Id == Id);
+        if (original != null)
+        {
+            // UDĚLÁME KOPII, abychom neupravovali data přímo v paměti před kliknutím na uložit
+            upravovanyFilm = new Models.Film
+            {
+                Id = original.Id,
+                Nazev = original.Nazev,
+                RokVydani = original.RokVydani,
+                Reziser = original.Reziser,
+                Zanr = original.Zanr,
+                Popis = original.Popis
+            };
+        }
+    }
+
+    private void UlozitZmeny()
+    {
+        // Po odklepnutí najdeme původní film a přepíšeme jeho hodnoty těmi z formuláře
+        var original = Models.DatabazeFilmu.Seznam.FirstOrDefault(f => f.Id == Id);
+        if (original != null && upravovanyFilm != null)
+        {
+            original.Nazev = upravovanyFilm.Nazev;
+            original.RokVydani = upravovanyFilm.RokVydani;
+            original.Reziser = upravovanyFilm.Reziser;
+            original.Zanr = upravovanyFilm.Zanr;
+            original.Popis = upravovanyFilm.Popis;
+        }
+
+        // Přesměrujeme zpět na úvod
+        NavManager.NavigateTo("/");
+    }
+}

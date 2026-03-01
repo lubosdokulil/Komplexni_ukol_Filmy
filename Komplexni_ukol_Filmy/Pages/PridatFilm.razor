@@ -1,0 +1,58 @@
+﻿@page "/pridat"
+@inject NavigationManager NavManager
+
+<PageTitle>Přidat film</PageTitle>
+
+<h1>Přidat nový film</h1>
+<hr />
+
+<div class="card shadow-sm p-4" style="max-width: 600px;">
+    <EditForm Model="novyFilm" OnValidSubmit="UlozitFilm">
+        <DataAnnotationsValidator />
+
+        <div class="mb-3">
+            <label class="form-label">Název filmu:</label>
+            <InputText @bind-Value="novyFilm.Nazev" class="form-control" />
+            <ValidationMessage For="@(() => novyFilm.Nazev)" class="text-danger" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Rok vydání:</label>
+            <InputNumber @bind-Value="novyFilm.RokVydani" class="form-control" />
+            <ValidationMessage For="@(() => novyFilm.RokVydani)" class="text-danger" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Režisér:</label>
+            <InputText @bind-Value="novyFilm.Reziser" class="form-control" />
+            <ValidationMessage For="@(() => novyFilm.Reziser)" class="text-danger" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Žánr:</label>
+            <InputText @bind-Value="novyFilm.Zanr" class="form-control" />
+            <ValidationMessage For="@(() => novyFilm.Zanr)" class="text-danger" />
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-success">Uložit film</button>
+            <a href="/" class="btn btn-outline-secondary">Zrušit</a>
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private Models.Film novyFilm = new Models.Film() { RokVydani = 2024 };
+
+    private void UlozitFilm()
+    {
+        // Generování nového ID
+        novyFilm.Id = Models.DatabazeFilmu.Seznam.Any() ? Models.DatabazeFilmu.Seznam.Max(f => f.Id) + 1 : 1;
+
+        // Přidání do paměti
+        Models.DatabazeFilmu.Seznam.Add(novyFilm);
+
+        // Automatické přesměrování zpět na hlavní stránku
+        NavManager.NavigateTo("/");
+    }
+}

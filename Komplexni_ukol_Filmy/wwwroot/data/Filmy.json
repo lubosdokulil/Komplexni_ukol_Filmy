@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "nazev": "Pelíšky",
+    "rokVydani": 1999,
+    "reziser": "Jan Hřebejk",
+    "zanr": "Komedie",
+    "popis": "Kultovní česká komedie odehrávající se na konci 60. let. Sledujeme osudy dvou rodin s odlišnými politickými a životními názory, které se setkávají pod jednou střechou."
+  },
+  {
+    "id": 2,
+    "nazev": "Vykoupení z věznice Shawshank",
+    "rokVydani": 1994,
+    "reziser": "Frank Darabont",
+    "zanr": "Drama",
+    "popis": "Příběh nespravedlivě odsouzeného bankéře Andyho, který si ve vězení nachází nečekaného přítele a nikdy neztrácí naději na svobodu."
+  },
+  {
+    "id": 3,
+    "nazev": "Pán prstenů: Společenstvo Prstenu",
+    "rokVydani": 2001,
+    "reziser": "Peter Jackson",
+    "zanr": "Fantasy",
+    "popis": "Hobit Frodo Pytlík se vydává na epickou výpravu s cílem zničit Jeden prsten a zachránit tak Středozem před temným pánem Sauronem."
+  },
+  {
+    "id": 4,
+    "nazev": "Temný rytíř",
+    "rokVydani": 2008,
+    "reziser": "Christopher Nolan",
+    "zanr": "Akční",
+    "popis": "Batman čelí svému dosud největšímu a nejšílenějšímu nepříteli – Jokerovi, kriminálnímu géniovi, který chce uvrhnout Gotham City do naprostého chaosu."
+  },
+  {
+    "id": 5,
+    "nazev": "Forrest Gump",
+    "rokVydani": 1994,
+    "reziser": "Robert Zemeckis",
+    "zanr": "Drama",
+    "popis": "Neobyčejný životní příběh prostoduchého, ale dobrosrdečného muže, který se nechtěně stává přímým aktérem klíčových událostí amerických dějin 20. století."
+  },
+  {
+    "id": 6,
+    "nazev": "Matrix",
+    "rokVydani": 1999,
+    "reziser": "Lana a Lilly Wachowski",
+    "zanr": "Sci-Fi",
+    "popis": "Počítačový hacker Neo zjišťuje šokující pravdu o tom, že lidstvo žije v simulované realitě ovládané inteligentními stroji, a přidává se k odboji."
+  },
+  {
+    "id": 7,
+    "nazev": "Samotáři",
+    "rokVydani": 2000,
+    "reziser": "David Ondříček",
+    "zanr": "Komedie",
+    "popis": "Hořká komedie o skupině mladých lidí v Praze, kteří se snaží najít smysl života, lásku a své místo ve světě na přelomu tisíciletí."
+  },
+  {
+    "id": 8,
+    "nazev": "Počátek (Inception)",
+    "rokVydani": 2010,
+    "reziser": "Christopher Nolan",
+    "zanr": "Sci-Fi",
+    "popis": "Profesionální zloděj, který krade cenná tajemství hluboko z podvědomí během spánku, dostane téměř nemožný úkol – myšlenku naopak vnuknout."
+  },
+  {
+    "id": 9,
+    "nazev": "Pulp Fiction: Historky z podsvětí",
+    "rokVydani": 1994,
+    "reziser": "Quentin Tarantino",
+    "zanr": "Krimi",
+    "popis": "Kultovní mozaika propletených příběhů dvou zabijáků, stárnoucího boxera, gangsterovy znuděné manželky a páru zlodějíčků v podsvětí Los Angeles."
+  },
+  {
+    "id": 10,
+    "nazev": "Star Wars: Epizoda V - Impérium vrací úder",
+    "rokVydani": 1980,
+    "reziser": "Irvin Kershner",
+    "zanr": "Sci-Fi",
+    "popis": "Povstalecká aliance čelí drtivému protiútoku Impéria, zatímco mladý Luke Skywalker hledá mistra Yodu, aby dokončil svůj výcvik rytíře Jedi."
+  }
+]
