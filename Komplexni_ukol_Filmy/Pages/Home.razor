@@ -28,11 +28,11 @@ else
         <div class="col-md-4">
             <label class="form-label"><strong>Řadit podle:</strong></label>
             <select class="form-select" @bind="kriteriumRazeni">
-                <option value="nazev_vzestupne">Názvu (A-Z)</option>
-                <option value="nazev_sestupne">Názvu (Z-A)</option>
-                <option value="rok_vzestupne">Roku (od nejstarších)</option>
-                <option value="rok_sestupne">Roku (od nejnovějších)</option>
-                <option value="reziser_vzestupne">Režiséra (A-Z)</option>
+                <option value="@Models.KriteriumRazeni.NazevVzestupne">Názvu (A-Z)</option>
+                <option value="@Models.KriteriumRazeni.NazevSestupne">Názvu (Z-A)</option>
+                <option value="@Models.KriteriumRazeni.RokVzestupne">Roku (od nejstarších)</option>
+                <option value="@Models.KriteriumRazeni.RokSestupne">Roku (od nejnovějších)</option>
+                <option value="@Models.KriteriumRazeni.ReziserVzestupne">Režiséra (A-Z)</option>
             </select>
         </div>
     </div>
@@ -69,7 +69,7 @@ else
 @code {
     // Proměnné napojené na výběrová menu (selecty)
     private string vybranyZanr = "";
-    private string kriteriumRazeni = "nazev_vzestupne";
+    private Models.KriteriumRazeni kriteriumRazeni = Models.KriteriumRazeni.NazevVzestupne;
 
     protected override async Task OnInitializedAsync()
     {
@@ -97,11 +97,11 @@ else
             // 2. Krok: Řazení pomocí nového C# "switch expression"
             return kriteriumRazeni switch
             {
-                "nazev_vzestupne" => dotaz.OrderBy(f => f.Nazev),
-                "nazev_sestupne" => dotaz.OrderByDescending(f => f.Nazev),
-                "rok_vzestupne" => dotaz.OrderBy(f => f.RokVydani),
-                "rok_sestupne" => dotaz.OrderByDescending(f => f.RokVydani),
-                "reziser_vzestupne" => dotaz.OrderBy(f => f.Reziser),
+                Models.KriteriumRazeni.NazevVzestupne => dotaz.OrderBy(f => f.Nazev),
+                Models.KriteriumRazeni.NazevSestupne => dotaz.OrderByDescending(f => f.Nazev),
+                Models.KriteriumRazeni.RokVzestupne => dotaz.OrderBy(f => f.RokVydani),
+                Models.KriteriumRazeni.RokSestupne => dotaz.OrderByDescending(f => f.RokVydani),
+                Models.KriteriumRazeni.ReziserVzestupne => dotaz.OrderBy(f => f.Reziser),
                 _ => dotaz
             };
         }
@@ -112,6 +112,7 @@ else
         var filmKSmazani = Models.DatabazeFilmu.Seznam.FirstOrDefault(f => f.Id == idFilmu);
         if (filmKSmazani != null)
         {
+            // Odstranění ze seznamu zruší referenci. Objekt následně zachytí Garbage Collector a zavolá jeho destruktor ~Film().
             Models.DatabazeFilmu.Seznam.Remove(filmKSmazani);
         }
     }

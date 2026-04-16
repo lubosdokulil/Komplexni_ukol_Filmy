@@ -21,5 +21,12 @@
 
         // Nové políčko pro popis (není povinné, proto nemá [Required])
         public string Popis { get; set; } = "";
+
+        // Destruktor pro uvolnění objektu z paměti
+        ~Film()
+        {
+            //Vypíše do konzole, že objekt filmu byl uvolněn z paměti
+            Console.WriteLine($"Objekt filmu {Nazev} byl uvolněn z paměti.");
+        }
     }
 }
